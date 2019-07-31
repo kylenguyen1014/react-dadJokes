@@ -48,8 +48,10 @@
     border: none;
     color: white;
     font-size: 1.25rem;
+    font-weight: 700;
     background-image: -webkit-linear-gradient(140deg, #c43cd6 50%, #25cccc 50%);
     transition: all 0.2s ease-in;
+    box-shadow: 5px 5px 10px #383333;
 }
 
 .Board-main-button span {
@@ -57,7 +59,8 @@
 }
 
 .Board-main-button:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
+    box-shadow: 5px 5px 5px #383333;
 }
 
 .Board-main-logo {
