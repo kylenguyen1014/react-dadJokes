@@ -11,7 +11,19 @@ class Jokes extends Component {
         super(props);
         this.state = {  }
     }
-
+    colorDisplay() {
+        if (this.props.vote < 0){
+            return 'black';
+        } else if (this.props.vote > 10) {
+            return 'green';
+        } else if (this.props.vote > 5){
+            return 'yellow';
+        } else if (this.props.vote > 0){
+            return 'orange';
+        } else {
+            return 'red';
+        };
+    }
     iconDisplay() {
         if (this.props.vote < 0){
             return sad;
@@ -32,7 +44,7 @@ class Jokes extends Component {
             <div className='Jokes'>
                 <div className='Jokes-score'>
                     <span className='Jokes-score-up' onClick={() => this.props.upVote(this.props.id)}><i className="fas fa-arrow-up"></i></span>
-                    <span className='Jokes-vote'>
+                    <span className='Jokes-vote' style={{borderColor : this.colorDisplay()}}>
                        {this.props.vote}
                     </span>
                     <span className='Jokes-score-down' onClick={() => this.props.downVote(this.props.id)}><i className="fas fa-arrow-down"></i></span> 

@@ -18,7 +18,12 @@ class Board extends Component {
 
     async componentDidMount() {
         setTimeout(() => {
-            this.newJokes();
+            // if (localStorage.getItem('jokes')){
+            //     let result = localStorage.getItem('jokes');
+            //     this.setState({jokes : result})
+            // } else {
+                this.newJokes();
+            // }
             this.setState({isLoaded: true});
         }, 3000);
     }
@@ -40,7 +45,9 @@ class Board extends Component {
             this.setState(st => ({
                 jokes : [...st.jokes, {id : res.data.id, joke: res.data.joke, vote : 0}]
             }))
+            
         }
+        // localStorage.setItem('jokes', this.state.jokes);
     }
 
     checkDuplicateJoke(id){
@@ -79,6 +86,7 @@ class Board extends Component {
         this.setState({jokes : array.sort(this.compareVote)});
     }
     render() { 
+        // const jokes = localStorage
         return (
             <div className='Board'>
                 {this.state.isLoaded 
