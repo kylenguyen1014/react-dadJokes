@@ -14,40 +14,54 @@ class Board extends Component {
         this.newJokes = this.newJokes.bind(this);
         this.upVote = this.upVote.bind(this);
         this.downVote = this.downVote.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     async componentDidMount() {
-        setTimeout(() => {
-            // if (localStorage.getItem('jokes')){
-            //     let result = localStorage.getItem('jokes');
-            //     this.setState({jokes : result})
-            // } else {
-                this.newJokes();
-            // }
-            this.setState({isLoaded: true});
-        }, 3000);
+        // localStorage.clear();
+        try {
+            setTimeout(() => {
+                if (localStorage.getItem('jokes')){
+                    let result = JSON.parse(localStorage.getItem('jokes'));
+                    this.setState({jokes : result})
+                } else {
+                    this.newJokes();
+                }
+                this.setState({isLoaded: true});
+            }, 3000);
+        }
+        catch (err){
+            alert(err);
+        }
     }
 
 
 
     componentDidUpdate(prevProps, prevState) {
-        
+        if (prevState.jokes !== this.state.jokes) {
+            localStorage.setItem('jokes', JSON.stringify(this.state.jokes));
+        }
     }
     
 
     async newJokes(){
-        for (let i=0; i < 10;i++){
-            let res;
-            do {
-                res = await axios.get('https://icanhazdadjoke.com/', {headers : {Accept :"application/json"}})
-            } while (this.checkDuplicateJoke(res.data.id))
-   
-            this.setState(st => ({
-                jokes : [...st.jokes, {id : res.data.id, joke: res.data.joke, vote : 0}]
-            }))
-            
+        try {
+            for (let i=0; i < 10;i++){
+                let res;
+                do {
+                    res = await axios.get('https://icanhazdadjoke.com/', {headers : {Accept :"application/json"}})
+                } while (this.checkDuplicateJoke(res.data.id))
+    
+                this.setState(st => ({
+                    jokes : [...st.jokes, {id : res.data.id, joke: res.data.joke, vote : 0}]
+                })) 
+            }
+            this.setState({isLoaded: true});
         }
-        // localStorage.setItem('jokes', this.state.jokes);
+        catch (err){
+            alert(err);
+        }
+
     }
 
     checkDuplicateJoke(id){
@@ -56,6 +70,11 @@ class Board extends Component {
         } else{
             return false;
         }
+    }
+
+    handleClick(){
+        this.setState({isLoaded: false});
+        this.newJokes();
     }
 
     compareVote(a,b){
@@ -86,7 +105,7 @@ class Board extends Component {
         this.setState({jokes : array.sort(this.compareVote)});
     }
     render() { 
-        // const jokes = localStorage
+        // const jokes = JSON.parse(localStorage.getItem('jokes'));
         return (
             <div className='Board'>
                 {this.state.isLoaded 
@@ -95,7 +114,7 @@ class Board extends Component {
                         <div className='Board-main'>
                             <h1 className='Board-main-title'>Dad <span>Jokes</span></h1>
                             <img className='Board-main-logo' alt='Main-icon' src={logo}/>
-                            <button className='Board-main-button' onClick={this.newJokes}>New <span>Jokes</span></button>
+                            <button className='Board-main-button' onClick={this.handleClick}>New <span>Jokes</span></button>
                         </div>
                         <div className='Board-jokes'>
                             {this.state.jokes.map(joke => {
