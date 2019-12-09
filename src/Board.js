@@ -3,6 +3,7 @@ import logo from './main-icon.png';
 import './Board.css';
 import axios from 'axios';
 import Jokes from './Jokes';
+import FlipMove from 'react-flip-move';
 
 class Board extends Component {
     constructor(props) {
@@ -117,6 +118,7 @@ class Board extends Component {
                             <button className='Board-main-button' onClick={this.handleClick}>New <span>Jokes</span></button>
                         </div>
                         <div className='Board-jokes'>
+                            <FlipMove duration={400}>
                             {this.state.jokes.map(joke => {
                                     return <Jokes 
                                             key={joke.id} 
@@ -128,6 +130,7 @@ class Board extends Component {
                                             />
                                 })
                             }
+                            </FlipMove>
                         </div>
                     </div> )
                 : (<div className='loader'></div>)
